@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Welcome to Jest!"
-date:   2016-09-06 13:31:33 +0800
+date:   2016-09-05 13:31:33 +0800
 ---
 ### Jest安装
 局部安装
