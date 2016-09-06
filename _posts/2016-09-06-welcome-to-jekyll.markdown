@@ -29,6 +29,7 @@ test('adds 1 + 2 to equal 3', () => {
 });
 ```
 ### 配置文件
+
 **修改package.json文件**
 
 ```
@@ -37,6 +38,7 @@ test('adds 1 + 2 to equal 3', () => {
 }
 ```
 ### 测试
+
 运行 `npm test`
 
 ### Notes
