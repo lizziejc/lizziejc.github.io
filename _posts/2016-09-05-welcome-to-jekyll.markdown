@@ -10,7 +10,8 @@ date:   2016-09-05 13:31:33 +0800
 全局安装 
 `npm install -g jest`
 
-### 测试文件
+### 测试
+
 **假设被测试文件为sam.js，内容如下**
 
 ```
@@ -28,7 +29,7 @@ test('adds 1 + 2 to equal 3', () => {
   expect(sum(1, 2)).toBe(3);
 });
 ```
-### 配置文件
+
 **修改package.json文件**
 
 ```
@@ -36,7 +37,9 @@ test('adds 1 + 2 to equal 3', () => {
   "test": "jest"
 }
 ```
-### 测试
+
+**测试**
+
 运行 `npm test`
 
 ### Notes
