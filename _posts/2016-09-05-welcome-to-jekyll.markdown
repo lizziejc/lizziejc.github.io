@@ -57,10 +57,13 @@ test('adds 1 + 2 to equal 3', () => {
 * `collectCoverage:true` ，系统会自动创建coverage文件夹，在coverage/lcov-report/ 文件夹中可看到被测试文件覆盖情况（未被覆盖代码行高亮显示）
 
 **2. 测试文件命名**
+
 * 如sum.test.js，遵循XXX.test.js或者XXX.spec.js，可放在任意位置
+
 * 放在`__tests__`文件夹内的XXX.js文件
 
 **3. jest命令**
+
 * 全局安装，可直接运行，如 `jest --coverage`
 
 * 局部安装，需在bin目录下运行，如 `./node_modules/.bin/jest --coverage`
