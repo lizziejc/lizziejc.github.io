@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Welcome to Jest!"
+permalink: "welcome-to-jest.html"
 date:   2016-09-05 13:31:33 +0800
 ---
 ### Jest安装
