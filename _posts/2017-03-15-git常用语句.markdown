@@ -1,0 +1,58 @@
+---
+layout: post
+title:  "Git常用"
+permalink: "git-welcome.html"
+date:   2017-03-15 10:14:33 +0800
+---
+【Gitlab 用户名、邮箱设置】   
+
+全局设置默认邮箱和用户名：   
+
+```   
+git config --global user.email "you@expample.com"
+git config --global user.name "your name"
+```  
+
+在某个项目中可以局部设置用户名和邮箱   
+
+``` 
+git config user.email "you@expample.com"
+git config user.name "your name"  
+```   
+
+局部设置会在当前项目中覆盖全局设置（如果没设置，则用全局的邮箱和用户名）  
+
+【git stash】    
+
+`git stash list` 查看stash列表   
+`git stash drop stash@{0}` 在git stash list中，去掉某个stash。   
+`git diff stash@{0} develop --name-only` 查看某次stash与当前分支的区别（仅显示修改了的文件名）   
+
+
+【多个remote】   
+
+如果我ff文件夹上有两个remote (A,B)，默认为A   
+
+假设前三次提交我都提交到了A上，第四次开始又提交了两次到B上，现在第六次提交，我想提交到A上。  
+这时在使用`git status`就无法看到A与本地有什么变化，因为`git status`只会比较本地的当次提交与上次提交的差异。   
+如果想查看可以用`git diff remote/branch`   
+如果只想查看内容变化的文件名，使用`git diff remote/branch --name-only`
+
+
+【branch】   
+
+`git branch -d ttt` 删除分支   
+`git checkout -b branchName` 创建并切换到分支branchName   
+
+【commit】   
+
+在git中查看commit tree   
+
+`git log --graph --all --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'`   
+
+
+
+***
+> http://www.redux.org.cn/   
+> http://www.redux.org.cn/docs/api/combineReducers.html
+
