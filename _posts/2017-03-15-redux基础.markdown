@@ -1,0 +1,169 @@
+---
+layout: post
+title:  "Redux基础"
+permalink: "redux-welcom.html"
+date:   2017-03-15 13:24:33 +0800
+---
+Redux应用的全部状态都保存在State（也称state tree）中。
+1. State通常为一个多层嵌套的对象，由唯一的Store管理且由`getState()`方法获得。   
+2. State 是只读的，惟一改变 state 的方法就是触发 action。
+3. 为了描述 action 如何改变 state tree ，你需要编写 reducers。
+
+So，把Redux运用起来需要三个部分：Action, Reducer, Store  
+
+### Action   
+* action是一个对象，`{ type:'', params }`   
+  * type: required，一般被定义成常量
+  * params: optional，store需要的数据     
+* action.js文件中，一般存放的是action创建函数，即返回action对象的方法。   
+
+```   
+// action type
+const ADD_TODO = 'ADD_TODO';
+
+// action
+{
+  type: ADD_TODO,
+  text: 'Build my first Redux app'
+}
+
+// action创建函数
+function addTodo(text) {
+  return {
+    type: ADD_TODO,
+    text
+  }
+}
+
+// 调用
+dispatch(addTodo(text))
+```   
+
+### Reducer  
+1. reducer 就是一个纯函数，接收旧的 state 和 action，返回新的 state。   
+2. reducer指定如何更新state   
+3. 在react中，我们不会直接调用reducer，而是先调用action创建函数`store.dispatch(action)`，所以需要，   
+  * 在action.js中预先定义好action.type
+  * 在reducer.js中定义好方法
+4. dispatch(action)时，参数action就是我们前面定义的action对象，包括type等属性，系统会根据action.type在reducer中找到对应的方法   
+
+```   
+// 初始化数据State
+const initialState = {
+  todos: [],
+  completed: false,
+};
+
+// Reducer中的方法
+function handler(state = initialState, action) {
+  switch (action.type) {
+    case ADD_TODO:
+      return Object.assign({}, state, {
+        todos: [
+          ...state.todos,
+          {
+            text: action.text
+          }
+        ]
+      })
+    case OTHER_ACTIONS:
+        return state;
+    default:
+        return state
+  }
+}
+```     
+**注意：**      
+* 不论handler方法里面执行了怎样的操作，最后都必须返回state（未变化的或者已更新的）  
+* 不要直接修改state的值，而是制作一个副本newState，修改后再赋值回来{state: newState}。这里常用两个方法：   
+  * 方法一：`Object.assign({},state,{completed: action.completed})`
+  * 方法二: `{ ...state, ...newState }` 
+* 永远不要在 reducer 里做这些操作：   
+    * 修改传入参数；   
+    * 执行有副作用的操作，如 API 请求和路由跳转；   
+    * 调用非纯函数，如 Date.now() 或 Math.random()   
+
+关于`Object.assign()`和`objA = objB`的基础知识扫盲：   
+
+```  
+// 引用
+var a = {name:'I am A'};
+var b = a;
+b.name = 'I am B';
+console.log(a.name); // 'I am B'
+
+// 复制
+var a = {name:'I am A'};
+var b = Object.assign({}, a, {name:'I am B'});
+console.log(a.name); // 'I am A'
+console.log(b.name); // 'I am B'
+```   
+
+### Store   
+Store管理唯一的state，也是把action和reducer关联起来的对象。它还包括几个方法   
+* 提供 getState() 方法获取 state；   
+* 提供 dispatch(action) 方法更新 state；   
+* 通过 subscribe(listener) 注册监听器;   
+* 通过 subscribe(listener) 返回的函数注销监听器。   
+
+用createStore方法来创建store,`let store = createStore(reducerName, initial)`  
+1. 参数一： 一个reducer，如果有多个reducers，就通过combineReducers() 方法组合成一个。
+2. 参数二：如果有初始数据，就通过第二个参数传进来，这个参数可选   
+
+创建store的同时，`<Provider store={store}><TopComponent/></Provider>`这个写法是必须的，也就是将store和顶层组件关联。
+
+```   
+import React from 'react';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import initState from './initState'; // 引入初始数据
+import handler from './reducers'; // 引入reducers
+import TopComponent from './components'; // 引入顶层组件
+
+// 其中initState, handler, TopComponent是自定义的
+const store = createStore(handler, initState, applyMiddleware(thunk));
+
+render(
+  <Provider store={store}>
+    <TopComponent/>
+  </Provider>,
+  document.getElementById('page')
+)
+```   
+redux只有一个store，所以一般都是创建在顶层，而不是每个组件都创建。子组件要用到state数据的时候也是通过props传下去的。
+
+### 把react组件与store中的数据关联
+
+我们已经在TopComponent这一层创建了store，那组件component与数据state又是怎么关联的呢？   
+在`<TopComponent/>`中添加以下语句，
+
+```   
+function mapStateToProps(state){
+  return state;
+}
+export default connect(mapStateToProps)(TopComponent);
+```
+connect的意思是把store.state与TopComponent关联起来，关联的形式是，把state这个对象作为props传给TopComponent。   
+如果mapStateToProps方法中返回的是state的子对象，则等同于把state的子对象作为props传给后面参数中的组件。   
+假设`store.getState() = { toDoApp:{todos:[], completed:false} }`，在TopComponent中`this.props.toDoApp === {todos:[], completed:false}`    
+
+### State   
+
+State的结构究竟是什么样子，是由reducer决定的。    
+在redux中，每个reducer都对应着一个state，而这些state分别嵌套在state tree中。   
+在createStore的时候，传入了一个reducer，这个reducer就对应着state tree中最顶层的state。
+如果传入的reducer是由多个子reducer组成，比如用combineReducers方法合成的，那么每个子reducer也就对应着state中每个子state。
+
+state 对象的结构由传入的多个 reducer 的 key 决定，并且通过reducer 命名来控制 state key 的命名。
+
+例如，`combineReducers({ todos: myTodosReducer, counter: myCounterReducer })` 将 state 结构变为 `{ todos, counter }`。
+
+ES6扫盲：
+`combineReducers({ counter, todos })` 与 `combineReducers({ counter: counter, todos: todos })` 一样。
+
+***
+> http://www.redux.org.cn/   
+> http://www.redux.org.cn/docs/api/combineReducers.html
+
