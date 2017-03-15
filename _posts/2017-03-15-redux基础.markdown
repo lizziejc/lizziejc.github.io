@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "Redux基础"
-permalink: "redux-welcom.html"
-date:   2017-03-15 13:24:33 +0800
+permalink: "redux-welcome.html"
+date:   2017-03-15 10:14:33 +0800
 ---
 Redux应用的全部状态都保存在State（也称state tree）中。
 1. State通常为一个多层嵌套的对象，由唯一的Store管理且由`getState()`方法获得。   
