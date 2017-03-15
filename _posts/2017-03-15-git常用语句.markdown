@@ -2,7 +2,7 @@
 layout: post
 title:  "Git常用"
 permalink: "git-welcome.html"
-date:   2017-03-15 10:14:33 +0800
+date:   2017-03-15 11:14:33 +0800
 ---
 【Gitlab 用户名、邮箱设置】   
 
@@ -51,6 +51,7 @@ git config user.name "your name"
 `git log --graph --all --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'`   
 
 【patch】   
+
 `git diff > patch` 将diff生成一个patch文件      
 `git apply patch` 将这个patch文件放入项目的根目录，执行这句，就相当于把diff内容更新到当前文件中。   
 应用场景：未提交的diff，可以以patch文件的形式发给其他人，再由apply操作应用到需要的项目中。   
