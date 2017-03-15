@@ -1,0 +1,59 @@
+---
+layout: post
+title:  "JS错误集锦"
+permalink: "js-errors.html"
+---
+**Import与Require**   
+**【错误一】** `index.js:21603 Uncaught Error: Expected the reducer to be a function.`   
+
+主文件index.jsx里如下引用   
+
+```
+var counter = require('../reducers/rdc.js'); 
+const store = Redux.createStore (counter);
+```
+
+reducers/rdc.js代码如下   
+
+```
+export default (state = 0, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1
+    case 'DECREMENT':
+      return state - 1
+    default:
+      return state
+  }
+}
+```   
+
+**解答：rdc的写法是es6的写法，index.jsx是node的写法。这里是两种模块加载方式，每一种都有自己的导入导出方式，需要匹配上**   
+
+【方法一】rdc.js不变，修改index.jsx   
+
+`import counter from '../reducers/rdc.js';`   
+
+【方法二】修改index.jsx和rdc.js   
+
+```
+var rdc = require('../reducers/rdc.js'); 
+const store = Redux.createStore (rdc.counter);
+```
+
+```
+var counter = function(state = 0, action){
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1
+    case 'DECREMENT':
+      return state - 1
+    default:
+      return state
+  }
+}
+exports.counter = counter;
+
+```   
+
+
