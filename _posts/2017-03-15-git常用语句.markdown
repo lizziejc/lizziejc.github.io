@@ -2,7 +2,6 @@
 layout: post
 title:  "Git常用"
 permalink: "git-welcome.html"
-date:   2017-03-15 11:17:33 +0800
 ---
 【Gitlab 用户名、邮箱设置】   
 
@@ -49,6 +48,10 @@ git config user.name "your name"
 在git中查看commit tree   
 
 `git log --graph --all --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'`   
+如果我已经执行了一次commit还没有push，之后修改了一些文件，我想把这次修改合并到上一次commit中，则使用   
+`git commit --amand`   
+
+`git diff commit_id_1 commit_id_2` 查看两次commit之间的文件修改   
 
 【patch】   
 
